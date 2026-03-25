@@ -1,0 +1,33 @@
+{
+    "name": "guillaumecregut/filewriter",
+    "description": "binary file writer and reader",
+    "license": "MIT",
+    "type": "library",
+    "minimum-stability": "stable",
+    "prefer-stable": true,
+    "autoload": {
+        "psr-4": {
+            "Editiel98\\FileWriter\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Guillaume Crégut",
+            "email": "gcregut@free.fr"
+        }
+    ],
+    "require": {
+        "php": "^8.4"
+    },
+     "autoload-dev": {
+        "psr-4": {
+            "Editiel98\\FileWriter\\Tests\\": "tests/"
+        }
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^13.0"
+    },
+    "scripts": {
+        "test": "phpunit"
+    }
+}
