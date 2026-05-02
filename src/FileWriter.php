@@ -88,7 +88,7 @@ class FileWriter
         }
         $this->checkHeader($header);
 
-        $magicByteSize = $this->getHeaderLength($header);
+        $magicByteSize = $this->getHeaderLength();
         $magicBytes = fread($fileHandle, $magicByteSize);
         if ($magicBytes === false) {
             throw new UnexpectedValueException("Failed to read magic bytes from file: {$file}");
