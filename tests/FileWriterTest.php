@@ -359,7 +359,7 @@ class FileWriterTest extends TestCase
     {
         $writer = new FileWriter($this->testFile, $this->validHeader, true);
         $writer->writeBinaryFile([['Temp', -5, -3.14]]);
-        $header = $writer->readHeaderFile($this->testFile,$this->validHeader);
+        $header = FileWriter::readHeaderFile($this->testFile,$this->validHeader);
         $this->assertIsArray($header);
         $this->assertArrayHasKey('signature', $header);
         $this->assertArrayHasKey('version', $header);

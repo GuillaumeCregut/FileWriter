@@ -115,7 +115,7 @@ To verify or retrieve only the header information (signature and version) withou
 
 ```php
 // Read just the header from the file
-$header = $writer->readHeaderFile('data.bin', [
+$header = FileWriter::readHeaderFile('data.bin', [
     'signature' => 'MYAPP',
     'version'   => 1
 ]);
@@ -191,7 +191,7 @@ Reads binary data from a file and returns parsed records.
 #### readHeaderFile()
 
 ```php
-public function readHeaderFile(string $file, array $header): array
+public static function readHeaderFile(string $file, array $header): array
 ```
 
 Reads only the header information from a file without processing the data section. Useful for validating file format before full parsing.

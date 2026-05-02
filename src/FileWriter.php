@@ -79,14 +79,14 @@ class FileWriter
         fclose($file);
     }
 
-    public function readHeaderFile(string $file, array $header): array
+    public static function readHeaderFile(string $file, array $header): array
     {
-        $this->checkHeader($header);
+        self::checkHeader($header);
         $fileHandle = fopen($file, 'rb');
         if ($fileHandle === false) {
             throw new RuntimeException("Unable to open file for reading: {$file}");
         }
-        $magicByteSize = $this->getHeaderLength();
+        $magicByteSize = strlen($header['signature']);
         $magicBytes = fread($fileHandle, $magicByteSize);
         if ($magicBytes === false) {
             throw new UnexpectedValueException("Failed to read magic bytes from file: {$file}");
@@ -180,7 +180,7 @@ class FileWriter
         return $returnArray;
     }
 
-    private function checkHeader(array $header): void
+    private static function checkHeader(array $header): void
     {
         if (!isset($header['signature']) || !is_string($header['signature'])) {
             throw new InvalidArgumentException("Header must contain a 'signature' key with a string value.");
@@ -192,6 +192,7 @@ class FileWriter
             throw new InvalidArgumentException("Header must contain a 'version' key with an integer value.");
         }
     }
+    
     protected function writeHeaderFile(mixed $file): bool
     {
         if (!is_resource($file)) {
