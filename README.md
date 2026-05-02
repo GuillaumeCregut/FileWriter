@@ -13,8 +13,34 @@ A robust PHP library for writing and reading binary files with customizable head
 
 ## Installation
 
+Since this library is hosted on GitHub, you need to configure Composer to use the VCS repository.
+
+Add the following to your project's `composer.json`:
+
+```json
+{
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "https://github.com/guillaumecregut/FileWriter"
+        }
+    ],
+    "require": {
+        "guillaumecregut/filewriter": "^1.0"
+    }
+}
+```
+
+Then install the library:
+
 ```bash
-composer require guillaumecregut/filwriter
+composer update
+```
+
+Alternatively, if you already have a composer.json, you can run:
+
+```bash
+composer require guillaumecregut/filewriter:^1.0
 ```
 
 ## Usage
@@ -83,6 +109,27 @@ foreach ($data as $record) {
 }
 ```
 
+### Reading File Headers
+
+To verify or retrieve only the header information (signature and version) without reading the entire file data, use the `readHeaderFile()` method:
+
+```php
+// Read just the header from the file
+$header = $writer->readHeaderFile('data.bin', [
+    'signature' => 'MYAPP',
+    'version'   => 1
+]);
+
+// Verify the file signature and version
+if ($header['signature'] === 'MYAPP' && $header['version'] === 1) {
+    echo "File is valid!\n";
+} else {
+    echo "File format mismatch!\n";
+}
+```
+
+This is useful for quickly validating file format before processing the entire file data.
+
 ### Appending to Existing Files
 
 To append data to an existing file, set the third parameter to `false`:
@@ -140,6 +187,24 @@ Reads binary data from a file and returns parsed records.
 **Returns:** Array of records with fields named according to the structure
 
 **Throws:** `Exception` if file cannot be opened, header doesn't match, or version mismatch occurs
+
+#### readHeaderFile()
+
+```php
+public function readHeaderFile(string $file, array $header): array
+```
+
+Reads only the header information from a file without processing the data section. Useful for validating file format before full parsing.
+
+**Parameters:**
+- `$file` (string): Path to the binary file to read
+- `$header` (array): Expected file header for validation
+
+**Returns:** Array containing:
+- `signature` (string): The file signature from the file
+- `version` (int): The file version number
+
+**Throws:** `Exception` if file cannot be opened or header bytes cannot be read
 
 ## File Format Specification
 

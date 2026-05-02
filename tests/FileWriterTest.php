@@ -109,7 +109,7 @@ class FileWriterTest extends TestCase
         $writer = new FileWriter('file.bin', $header, true);
     }
 
-    public function testHeaderMissingVersionThroExcecption(): void
+    public function testHeaderMissingVersionThrowExcecption(): void
     {
         $header = [
             'signature' => 'ABCD'
@@ -131,7 +131,7 @@ class FileWriterTest extends TestCase
         $writer = new FileWriter('file.bin', $header, true);
     }
 
-    public function testStringVersionThroException(): void
+    public function testStringVersionThrowException(): void
     {
         $header = [
             'signature' => 'ABCD',
@@ -142,7 +142,7 @@ class FileWriterTest extends TestCase
         $writer = new FileWriter('file.bin', $header, true);
     }    
 
-    public function testFloatVersionThroException(): void
+    public function testFloatVersionThrowException(): void
     {
         $header = [
             'signature' => 'ABCD',
@@ -153,7 +153,7 @@ class FileWriterTest extends TestCase
         $writer = new FileWriter('file.bin', $header, true);
     }
 
-    public function testArrayVersionThroException(): void
+    public function testArrayVersionThrowException(): void
     {
         $header = [
             'signature' => 'ABCD',
@@ -352,6 +352,20 @@ class FileWriterTest extends TestCase
  
         $this->assertSame(-5, $result[0]['number']);
         $this->assertEqualsWithDelta(-3.14, $result[0]['float'], 0.0001);
+    }
+    
+/* Reading Header tests */
+    public function testReadHeaderFileWillReturnHeaderValues(): void
+    {
+        $writer = new FileWriter($this->testFile, $this->validHeader, true);
+        $writer->writeBinaryFile([['Temp', -5, -3.14]]);
+        $header = $writer->readHeaderFile($this->testFile,$this->validHeader);
+        $this->assertIsArray($header);
+        $this->assertArrayHasKey('signature', $header);
+        $this->assertArrayHasKey('version', $header);
+        $this->assertSame($this->validHeader['signature'], $header['signature']);
+        $this->assertSame($this->validHeader['version'], $header['version']);
+
     }
     
 

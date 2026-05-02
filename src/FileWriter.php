@@ -79,6 +79,28 @@ class FileWriter
         fclose($file);
     }
 
+    public function readHeaderFile(string $file, array $header): array
+    {
+        $this->checkHeader($header);
+        $fileHandle = fopen($file, 'rb');
+        if ($fileHandle === false) {
+            throw new RuntimeException("Unable to open file for reading: {$file}");
+        }
+        $magicByteSize = $this->getHeaderLength();
+        $magicBytes = fread($fileHandle, $magicByteSize);
+        if ($magicBytes === false) {
+            throw new UnexpectedValueException("Failed to read magic bytes from file: {$file}");
+        }
+        $returnArray['signature'] = $magicBytes;
+        $versionBytes = fread($fileHandle, 4);
+        if ($versionBytes === false) {
+            throw new UnexpectedValueException("Failed to read version bytes from file: {$file}");
+        }
+        $version = unpack('V', $versionBytes)[1];
+        $returnArray['version'] = $version;
+        return $returnArray;
+    }
+
     public function readFile(string $file, array $header, array $structure): array
     {
         $this->checkHeader($header);
@@ -86,7 +108,6 @@ class FileWriter
         if ($fileHandle === false) {
             throw new RuntimeException("Unable to open file for reading: {$file}");
         }
-        $this->checkHeader($header);
 
         $magicByteSize = $this->getHeaderLength();
         $magicBytes = fread($fileHandle, $magicByteSize);
